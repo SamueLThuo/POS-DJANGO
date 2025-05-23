@@ -1,0 +1,92 @@
+<!-- templates/sales/receipt.html -->
+ {%load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Receipt #{{ sale.id }}</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+        }
+
+        @media print {
+            body {
+                width: 58mm;
+                margin: 0 auto;
+                font-size: 12px;
+            }
+
+            .no-print {
+                display: none;
+            }
+
+            img.logo {
+                width: 50px;
+                height: auto;
+                display: block;
+                margin: 0 auto;
+            }
+
+            .text-center {
+                text-align: center;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            th, td {
+                padding: 4px 0;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="text-center">
+        <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
+        <h4>COMPANY name</h4>
+        <p><small>Date: {{ sale.date }}</small></p>
+        <p><small>Sale ID: #{{ sale.id }}</small></p>
+        <hr>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>@</th>
+                <th>Sub</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in sale.items.all %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.product.price }}</td>
+                <td>{{ item.subtotal }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="3">TOTAL</th>
+                <th>{{ sale.total }}</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="text-center mt-2">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ request.build_absolute_uri }}&size=100x100" alt="QR Code">
+    </div>
+
+    <div class="text-center mt-2 no-print">
+        <button onclick="window.print()">🖨️ Print</button>
+        <a href="{% url 'home' %}">← Back</a>
+    </div>
+</body>
+</html>

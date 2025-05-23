@@ -1,0 +1,18 @@
+# Python
+*.pyc
+__pycache__/
+
+# Django
+db.sqlite3
+/static/
+media/
+
+# VS Code
+.vscode/
+
+# Environment
+.env
+
+# Migrations (optional for public repos)
+*/migrations/*.py
+!*/migrations/__init__.py
